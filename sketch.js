@@ -18,15 +18,41 @@ var pointSound;
 
 var scoreSound;
 
-var fontColor = "rgb(187, 193, 201)"
+let pressSpaceBarColor = '#2b3363';
+let backgroundColor = '#364f6b';
+let ballColor = '#fc5185';
+let fontColor = '#43dde6';
+let pipeColor = '#f0f0f0';
+function showText(display_text,font_size,color,style,position){
+    textAlign(CENTER);
+    textSize(font_size);
+    textStyle(style);
+    noStroke();
+    fill(color)
+    textFont('Montserrat');
+    text(display_text, windowWidth / 5, windowHeight / 2 + position);
+}
 
-function preload() {}
+function showLogo(display_text,font_size,color,style,position){
+    textSize(font_size);
+    textStyle(style);
+    noStroke();
+    fill(color)
+    textFont('Montserrat');
+    text(display_text, windowWidth / 12, windowHeight / 17 + position);
+}
+
+
+function preload() { 
+    
+    
+}
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
-    background(200);
     ball = new Ball();
     pipes.push(new Pipe());
+    
 }
 
 function windowResized() {
@@ -34,58 +60,31 @@ function windowResized() {
 }
 
 function draw() {
-    background(0);
+    background(backgroundColor);
     ball.UPDATE();
     ball.SHOW();
-    textAlign(CENTER);
-    fill("rgba(32, 32, 33,0.5)");
-    textSize(40);
-    noStroke();
-    text("Press Spacebar", windowWidth / 2, windowHeight / 2);
+    showLogo('FLAPPY',20,fontColor,'BOLD',0);
+    showText('PRESS SPACEBAR',25,fontColor,'BOLD',150);
+
     if (true == stopped) {
-        fill(fontColor);
-        textAlign(CENTER);
-        textSize(30);
-        text("Click to resume", windowWidth / 2, windowHeight / 2 + 180);
+        showText('CLICK TO RESUME',25,fontColor,'NORMAL',200);
     }
     if (false == stopped) if (0 == pipes.length) {
         push();
-        fill(fontColor);
-        noStroke();
-        textAlign(CENTER);
-        textSize(30);
-        text("GAME OVER", windowWidth / 2, windowHeight / 2 - 200);
+        
         if (0 == count1) {
-            fill(fontColor);
-            noStroke();
-            textAlign(CENTER);
-            textSize(30);
-            text(" SCORE : " + count1, windowWidth / 2, windowHeight / 2 - 100);
+            showText(' SCORE : '+(count1),50,ballColor,'BOLD',0);
         } else {
-            fill(fontColor);
-            noStroke();
-            textAlign(CENTER);
-            textSize(30);
-            text(" SCORE : " + (count1 - 1), windowWidth / 2, windowHeight / 2 - 100);
+            showText(' SCORE : '+(count1),50,ballColor,'BOLD',0);
             count1 = 0;
-            fill(62, 69, 71);
-            noStroke();
-            textAlign(CENTER);
-            textSize(30);
-            text("Click to resume", windowWidth / 2, windowHeight / 2 + 180);
+            showText(' CLICK TO RESUME ',25,fontColor,'BOLD',200);
             pop();
         }
     } else {
-        fill(fontColor);
-        noStroke();
-        textAlign(CENTER);
-        textSize(30);
-        text(" SCORE : " + count1, windowWidth / 2, windowHeight / 2 - 100);
-        textAlign(CENTER);
-        textSize(30);
-        text("Esc to pause", windowWidth / 2, windowHeight / 2 + 180);
+        showText(' SCORE : ' +(count1),50,ballColor,'BOLD',0);
+        showText(' ESC TO PAUSE ',25,fontColor,'BOLD',250);
     }
-   
+
     if (frameCount % 100 === 0) pipes.push(new Pipe());
     for (var a = pipes.length - 1; a >= 0; a--) if (0 != pipes.length) {
         pipes[a].SHOW();
@@ -93,35 +92,28 @@ function draw() {
         if (pipes[a].offscreen()) pipes.splice(a, 1);
         if (pipes[a].x == ball.x) {
             count1 += 1;
-            fill(fontColor);
-            noStroke();
-            textAlign(CENTER);
-            textSize(30);
-            text(" SCORE : " + (a + 1), windowWidth / 2, windowHeight / 2 - 100);
+            showText(' SCORE : '+(count1),50,ballColor,'BOLD',0);
         }
         if (pipes[a].hits(ball)) {
             ball.y = windowHeight / 2 + 90;
             noLoop();
             // push();
+            showText('GAME OVER',70,fontColor,'BOLD',-100);
             pipes.length = [];
             redraw();
-            fill(fontColor);
-            noStroke();
-            textAlign(CENTER);
-            textSize(30);
-            text("Click to restart", windowWidth / 2, windowHeight / 2 + 280);
+            showText(' SCORE : '+(count1),50,ballColor,'BOLD',0);
             // pop();
         }
     }
 }
 
-function mouseReleased() {
-    stopped = false;
-    loop();
-}
 
 function keyPressed() {
-    if (" " == key) ball.UP();
+    if (" " == key) {
+        ball.UP();
+        stopped = false;
+        loop();
+    }
     if (27 == keyCode) {
         stopped = true;
         noLoop();

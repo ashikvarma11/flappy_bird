@@ -15,6 +15,7 @@ function Pipe()
 	
 	this.SHOW=function()
 	{   
+		let pipeColor = '#f0f0f0';
        
 	 if(this.top>this.topThresh)
     {
@@ -26,8 +27,7 @@ function Pipe()
     this.bottom=this.bottomThresh;
     }
 
-		fill(72, 135, 45);
-		stroke(72, 135, 45);
+		fill(pipeColor)
 			if(this.blow==true)
 		{
 			fill(255, 0, 0);
